@@ -12,8 +12,8 @@ on:
 jobs:
 
   linux:
-    name: "Ubuntu 20.04 + PostgreSQL ${{matrix.PGVER}}"
-    runs-on: ubuntu-20.04
+    name: "Ubuntu 24.04 + PostgreSQL ${{matrix.PGVER}}"
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         PGVER: [10, 11, 12, 13, 14, 15, 18]
@@ -24,8 +24,10 @@ jobs:
       - name: "InstallDB"
         run: |
           echo "::group::apt-get-update"
-          echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main ${{matrix.PGVER}}" \
-          | sudo tee /etc/apt/sources.list.d/pgdg.list
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+            | sudo gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/postgresql-keyring.gpg] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main ${{matrix.PGVER}}" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list
           sudo -nH apt-get -q update
           echo "::endgroup::"
 
