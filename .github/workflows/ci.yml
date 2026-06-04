@@ -19,7 +19,7 @@ jobs:
         PGVER: [10, 11, 12, 13, 14, 15, 18]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "InstallDB"
         run: |
